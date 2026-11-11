@@ -6,7 +6,7 @@ export const profile = {
   designation: "Software Engineer",
   roles: ["Software Engineer", "Full Stack Developer", "Android Developer"],
   intro:
-    "I build reliable web and Android applications, with hands-on experience in machine learning and on-device AI.",
+    "From concept to launch, I design and develop web and mobile applications with a focus on clean experiences, reliable performance, and long-term scalability.",
   location: "Dhaka, Bangladesh",
   photo: "/images/profile.jpg",
   resume: "/resume/Sheikh-Sazzaduzzaman-Resume.pdf",
