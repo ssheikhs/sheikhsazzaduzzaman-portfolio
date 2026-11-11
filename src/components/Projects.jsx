@@ -1,16 +1,17 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { projects } from "../data/portfolio.js";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import SectionHeading from "./SectionHeading.jsx";
-import { fadeUp, RevealGroup } from "./Motion.jsx";
+import { ease, fadeUp, Reveal } from "./Motion.jsx";
 
-export function ProjectCard({ p }) {
+export function ProjectCard({ p, variants = fadeUp }) {
   return (
     <motion.article
-      variants={fadeUp}
+      variants={variants}
       whileHover={{ y: -6 }}
       transition={{ type: "spring", stiffness: 300, damping: 24 }}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-line bg-surface transition-shadow duration-300 hover:shadow-[0_24px_48px_-28px_rgba(15,30,61,0.45)]"
+      className="group flex w-full flex-col overflow-hidden rounded-2xl border border-line bg-surface transition-shadow duration-300 hover:shadow-[0_24px_48px_-28px_rgba(15,30,61,0.45)]"
     >
       <Link to={`/projects/${p.slug}`} tabIndex={-1} aria-hidden="true" className="block overflow-hidden border-b border-line bg-paper">
         <img
@@ -39,19 +40,68 @@ export function ProjectCard({ p }) {
   );
 }
 
+const FILTERS = [
+  { id: "all", label: "All" },
+  { id: "web", label: "Web apps" },
+  { id: "mobile", label: "Mobile apps" },
+];
+
 export default function Projects() {
+  const [filter, setFilter] = useState("all");
+  const shown = projects.filter((p) => filter === "all" || p.type === filter);
+  const count = (id) => (id === "all" ? projects.length : projects.filter((p) => p.type === id).length);
+
   return (
     <section id="projects" className="border-y border-line bg-surface py-20 md:py-28">
       <div className="container-x">
         <SectionHeading title="Projects">
-          Four projects I'm proud of, across the web, Android and machine learning. Open any of them for the stack,
-          the hard parts and what I'd build next.
+          Web and mobile apps I've designed and built, from full-stack platforms to Flutter and Android apps. Open any
+          project for its stack, the hard parts and what I'd build next.
         </SectionHeading>
-        <RevealGroup gap={0.12} className="grid gap-6 md:grid-cols-2">
-          {projects.map((p) => (
-            <ProjectCard key={p.slug} p={p} />
+
+        <Reveal className="mb-8 flex flex-wrap gap-2" role="group" aria-label="Filter projects">
+          {FILTERS.map((f) => (
+            <button
+              key={f.id}
+              type="button"
+              onClick={() => setFilter(f.id)}
+              aria-pressed={filter === f.id}
+              className={`relative rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+                filter === f.id ? "text-white" : "text-muted hover:text-ink"
+              }`}
+            >
+              {filter === f.id && (
+                <motion.span
+                  layoutId="project-filter"
+                  className="absolute inset-0 rounded-full bg-ink"
+                  transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                />
+              )}
+              <span className="relative">
+                {f.label} <span className="opacity-60">{count(f.id)}</span>
+              </span>
+            </button>
           ))}
-        </RevealGroup>
+        </Reveal>
+
+        <motion.div layout className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <AnimatePresence mode="popLayout">
+            {shown.map((p, i) => (
+              <motion.div
+                key={p.slug}
+                layout
+                className="flex"
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "0px 0px -60px 0px" }}
+                exit={{ opacity: 0, scale: 0.96, transition: { duration: 0.2 } }}
+                transition={{ duration: 0.5, ease, delay: (i % 3) * 0.08 }}
+              >
+                <ProjectCard p={p} variants={undefined} />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
       </div>
     </section>
   );

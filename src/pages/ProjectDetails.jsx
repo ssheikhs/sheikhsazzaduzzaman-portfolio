@@ -45,8 +45,9 @@ export default function ProjectDetails() {
 
   if (!p) return <NotFound message="There's no project at this address." />;
 
-  const others = [projects[(index + 1) % projects.length], projects[(index + 2) % projects.length]];
+  const others = [1, 2, 3].map((k) => projects[(index + k) % projects.length]);
   const isApk = p.live?.url.endsWith(".apk");
+  const noLive = p.type === "mobile" ? "App build coming soon" : "Live demo coming soon";
 
   return (
     <>
@@ -67,7 +68,7 @@ export default function ProjectDetails() {
               </a>
             ) : (
               <span className="btn cursor-not-allowed border border-dashed border-line bg-paper text-muted" aria-disabled="true">
-                Live demo coming soon
+                {noLive}
               </span>
             )}
             <a href={p.github} target="_blank" rel="noreferrer" className="btn-dark">
@@ -149,7 +150,7 @@ export default function ProjectDetails() {
                       </a>
                     ) : (
                       <span className="flex items-center gap-2 text-muted">
-                        <FiExternalLink aria-hidden="true" /> Live demo coming soon
+                        <FiExternalLink aria-hidden="true" /> {noLive}
                       </span>
                     )}
                   </li>
@@ -167,6 +168,22 @@ export default function ProjectDetails() {
                   )}
                 </ul>
               </div>
+              {p.demo && (
+                <div>
+                  <h2 className="text-lg font-semibold">Demo accounts</h2>
+                  <ul className="mt-3 space-y-3">
+                    {p.demo.map((d) => (
+                      <li key={d.email} className="rounded-xl border border-line bg-paper p-3 text-sm">
+                        <p className="font-semibold">{d.role}</p>
+                        <p className="mt-1 break-all text-muted">{d.email}</p>
+                        <p className="text-muted">
+                          Password: <code className="font-medium text-ink">{d.password}</code>
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </aside>
         </div>
@@ -175,7 +192,7 @@ export default function ProjectDetails() {
       <section className="border-t border-line bg-surface py-16 md:py-20">
         <div className="container-x">
           <h2 className="mb-8 text-3xl font-bold">More projects</h2>
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {others.map((o) => (
               <ProjectCard key={o.slug} p={o} />
             ))}

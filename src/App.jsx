@@ -1,10 +1,11 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 import Home from "./pages/Home.jsx";
-import ProjectDetails from "./pages/ProjectDetails.jsx";
 import NotFound from "./pages/NotFound.jsx";
+
+const ProjectDetails = lazy(() => import("./pages/ProjectDetails.jsx"));
 
 // Scrolls to #section after navigating (e.g. from a project page back to /#projects)
 function ScrollManager() {
@@ -34,11 +35,13 @@ export default function App() {
       </a>
       <Navbar />
       <main id="main" className="flex-1">
+        <Suspense fallback={<div className="min-h-[60vh]" />}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/projects/:slug" element={<ProjectDetails />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </Suspense>
       </main>
       <Footer />
     </div>
