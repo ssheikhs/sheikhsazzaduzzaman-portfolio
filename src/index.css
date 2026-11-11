@@ -1,0 +1,68 @@
+@import "@fontsource-variable/inter";
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+
+  --color-paper: #f6f8fb;
+  --color-surface: #ffffff;
+  --color-ink: #0f1e3d;
+  --color-ink-2: #1c2f57;
+  --color-muted: #586379;
+  --color-line: #dfe5ee;
+  --color-brand: #1d4ed8;
+  --color-brand-dark: #1e3a8a;
+  --color-brand-soft: #e8effd;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+  body {
+    overflow-x: clip;
+    @apply bg-paper font-sans text-ink antialiased;
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+  }
+  ::selection {
+    background: var(--color-brand);
+    color: #fff;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+}
+
+@utility container-x {
+  @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+}
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-[0.95rem] font-semibold transition-[color,background-color,border-color,transform,box-shadow] duration-200 active:scale-[0.97] hover:-translate-y-px;
+}
+@utility btn-primary {
+  @apply btn bg-brand text-white hover:bg-brand-dark;
+}
+@utility btn-outline {
+  @apply btn border border-ink/20 bg-surface text-ink hover:border-ink;
+}
+@utility btn-dark {
+  @apply btn bg-ink text-white hover:bg-ink-2;
+}
+@utility chip {
+  @apply inline-flex items-center rounded-full border border-line bg-surface px-3 py-1 text-sm font-medium text-ink;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; }
+}
