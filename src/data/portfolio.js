@@ -165,7 +165,8 @@ export const experience = [
   },
 ];
 
-export const projects = [
+// Set `hidden: true` on a project to remove it from the site without deleting its content.
+const allProjects = [
   {
     type: "web",
     slug: "quizhero",
@@ -373,6 +374,7 @@ export const projects = [
   },
   {
     type: "mobile",
+    hidden: true,
     slug: "signbangla",
     name: "SignBangla",
     tagline: "Real-time Bangla sign language sentence recognition on an Android phone.",
@@ -399,3 +401,5 @@ export const projects = [
     ],
   },
 ];
+
+export const projects = allProjects.filter((p) => !p.hidden);
